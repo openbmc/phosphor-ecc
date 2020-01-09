@@ -1,0 +1,10 @@
+Ok-To-Test+1: Jenkins <openbmc-ci-admin@ozlabs.org>
+Verified+1: Jenkins <openbmc-ci-admin@ozlabs.org>
+Code-Review+1: P. K. Lee <p.k.lee@quantatw.com>
+Code-Review+1: Benjamin Fair <benjaminfair@google.com>
+Code-Review+2: Will Liang <will.liang@quantatw.com>
+Submitted-by: Will Liang <will.liang@quantatw.com>
+Submitted-at: Thu, 09 Jan 2020 14:09:42 +0000
+Reviewed-on: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-ecc/+/22554
+Project: openbmc/phosphor-ecc
+Branch: refs/heads/master
