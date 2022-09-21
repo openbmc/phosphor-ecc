@@ -1,0 +1,7 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+2: Patrick Williams <patrick@stwcx.xyz>
+Submitted-by: Patrick Williams <patrick@stwcx.xyz>
+Submitted-at: Wed, 21 Sep 2022 20:08:15 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/phosphor-ecc/+/57346
+Project: openbmc/phosphor-ecc
+Branch: refs/heads/master
