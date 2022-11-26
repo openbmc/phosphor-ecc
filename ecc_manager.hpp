@@ -13,14 +13,14 @@ namespace memory
 {
 
 template <typename... T>
-using ServerObject = typename sdbusplus::server::object::object<T...>;
+using ServerObject = typename sdbusplus::server::object_t<T...>;
 
 using EccInterface = sdbusplus::xyz::openbmc_project::Memory::server::MemoryECC;
 using EccObject = ServerObject<EccInterface>;
 /** @class
  *  @brief Manages ECC
  */
-class ECC : sdbusplus::server::object::object<
+class ECC : sdbusplus::server::object_t<
                 sdbusplus::xyz::openbmc_project::Memory::server::MemoryECC>
 {
   public:
@@ -36,8 +36,8 @@ class ECC : sdbusplus::server::object::object<
      * @param[in] bus     - Handle to system dbus
      * @param[in] objPath - The Dbus path
      */
-    ECC(sdbusplus::bus::bus& bus, const std::string& objPath) :
-        sdbusplus::server::object::object<
+    ECC(sdbusplus::bus_t& bus, const std::string& objPath) :
+        sdbusplus::server::object_t<
             sdbusplus::xyz::openbmc_project::Memory::server::MemoryECC>(
             bus, objPath.c_str()),
         _bus(bus), _event(sdeventplus::Event::get_default()),
@@ -54,7 +54,7 @@ class ECC : sdbusplus::server::object::object<
 
   private:
     /** @brief sdbusplus bus client connection. */
-    sdbusplus::bus::bus& _bus;
+    sdbusplus::bus_t& _bus;
     /** @brief the Event Loop structure */
     sdeventplus::Event _event;
     /** @brief Read Timer */
