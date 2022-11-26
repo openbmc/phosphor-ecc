@@ -226,7 +226,7 @@ void ECC::getMaxLogValue()
 void ECC::addSELLog(std::string message, std::string path,
                     std::vector<uint8_t> selData, bool assert, uint16_t genId)
 {
-    // sdbusplus::bus::bus bus = sdbusplus::bus::new_default();
+    // sdbusplus::bus_t bus = sdbusplus::bus::new_default();
 
     auto selCall = _bus.new_method_call(
         "xyz.openbmc_project.Logging.IPMI", "/xyz/openbmc_project/Logging/IPMI",
