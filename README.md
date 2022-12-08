@@ -8,8 +8,8 @@ identify problems before they become catastrophic faulty memory module.
 
 ### Requirements
 
-* The EDAC driver must be supported and enabled
-* The `phosphor-sel-logger` package must be installed
+- The EDAC driver must be supported and enabled
+- The `phosphor-sel-logger` package must be installed
 
 ### Monitor Daemon
 
@@ -19,18 +19,18 @@ uncorrectable ECC counts in the EDAC driver.
 
 it also provide the following path on D-Bus:
 
-* bus name    : `xyz.openbmc_project.Memory.ECC`
-* object path : `/xyz/openbmc_project/metrics/memory/BmcECC`
-* interface   : `xyz.openbmc_project.Memory.MemoryECC`
+- bus name : `xyz.openbmc_project.Memory.ECC`
+- object path : `/xyz/openbmc_project/metrics/memory/BmcECC`
+- interface : `xyz.openbmc_project.Memory.MemoryECC`
 
 The interface with the following properties:
 
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| isLoggingLimitReached | bool | ECC logging reach limits|
-| ceCount| int64 | correctable ECC events |
-| ueCount| int64 | uncorrectable ECC events |
-| state| string | bmc ECC event state |
+| Property              | Type   | Description              |
+| --------------------- | ------ | ------------------------ |
+| isLoggingLimitReached | bool   | ECC logging reach limits |
+| ceCount               | int64  | correctable ECC events   |
+| ueCount               | int64  | uncorrectable ECC events |
+| state                 | string | bmc ECC event state      |
 
 It also devised a mechanism to limit the "maximum number" of logs to avoid
 creating a large number of correctable ECC logs. When the `maximum quantity` is
@@ -43,9 +43,9 @@ value if necessary.
 Use the `phosphor-sel-logger` package to record the following logs in BMC SEL
 format.
 
-* correctable ECC log : when fetching the `ce_count` from EDAC driver parameter
+- correctable ECC log : when fetching the `ce_count` from EDAC driver parameter
   and the count exceeds previous count.
-* uncorrectable ECC log : when fetching the `ue_count` from EDAC driver
+- uncorrectable ECC log : when fetching the `ue_count` from EDAC driver
   parameter and the count exceeds previous count.
-* logging limit reached log : When the correctable ECC log reaches the
+- logging limit reached log : When the correctable ECC log reaches the
   `maximum quantity`.
