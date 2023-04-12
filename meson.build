@@ -5,7 +5,7 @@ project(
     default_options: [
         'cpp_std=c++20',
     ],
-    meson_version: '>=0.57.0',
+    meson_version: '>=0.58.0',
 )
 
 executable(
@@ -44,4 +44,4 @@ configure_file(
   output: 'phosphor-ecc.service',
   configuration: conf_data,
   install: true,
-  install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'))
+  install_dir: systemd.get_variable('systemdsystemunitdir'))
