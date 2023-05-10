@@ -20,8 +20,9 @@ using EccObject = ServerObject<EccInterface>;
 /** @class
  *  @brief Manages ECC
  */
-class ECC : sdbusplus::server::object_t<
-                sdbusplus::xyz::openbmc_project::Memory::server::MemoryECC>
+class ECC :
+    sdbusplus::server::object_t<
+        sdbusplus::xyz::openbmc_project::Memory::server::MemoryECC>
 {
   public:
     ECC() = delete;

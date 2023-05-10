@@ -2,14 +2,14 @@
 
 #include "ecc_manager.hpp"
 
-#include <iostream>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/sdbus.hpp>
 #include <sdbusplus/server/manager.hpp>
 
+#include <iostream>
+
 int main(void)
 {
-
     /** @brief Dbus constructs */
     auto bus = sdbusplus::bus::new_default();
 

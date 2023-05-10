@@ -2,10 +2,11 @@
 
 #include "ecc_manager.hpp"
 
+#include <phosphor-logging/elog-errors.hpp>
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <phosphor-logging/elog-errors.hpp>
 #include <string>
 
 using namespace phosphor::logging;
@@ -24,7 +25,6 @@ static constexpr auto interval = 1000000;
 static constexpr uint16_t selBMCGenID = 0x0020;
 void ECC::init()
 {
-
     namespace fs = std::filesystem;
 
     if (fs::exists(sysfsRootPath))
@@ -36,7 +36,6 @@ void ECC::init()
         }
         catch (const std::system_error& e)
         {
-
             log<level::INFO>(
                 "Logging failing sysfs file",
                 phosphor::logging::entry("FILE=%s", sysfsRootPath));
