@@ -39,9 +39,10 @@ configure_file(output : 'config.h',
 systemd = dependency('systemd')
 conf_data = configuration_data()
 conf_data.set('bindir', get_option('prefix') / get_option('bindir'))
-configure_file(
-  input: 'phosphor-ecc.service.in',
-  output: 'phosphor-ecc.service',
-  configuration: conf_data,
-  install: true,
-  install_dir: systemd.get_variable('systemdsystemunitdir'))
+fs = import('fs')
+fs.copyfile(
+    'phosphor-ecc.service.in',
+    'phosphor-ecc.service',
+    install: true,
+    install_dir: systemd.get_variable('systemdsystemunitdir')
+)
