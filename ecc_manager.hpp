@@ -7,6 +7,8 @@
 #include <sdeventplus/utility/timer.hpp>
 #include <xyz/openbmc_project/Memory/MemoryECC/server.hpp>
 
+#include <chrono>
+
 namespace phosphor
 {
 namespace memory
@@ -49,6 +51,11 @@ class ECC :
     int64_t previousCeCounter = 0;
     int64_t previousUeCounter = 0;
     int64_t maxECCLog = 0;
+#ifdef ECC_PHOSPHOR_LOGGING
+    int64_t startCeCount = 0;
+    bool maxCeLimitReached = false;
+    std::chrono::system_clock::time_point maxCeLimitReachedTime{};
+#endif
 
     void run();
     void controlEDACReport(std::string);
