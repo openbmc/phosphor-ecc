@@ -4,10 +4,16 @@
 
 #include <phosphor-logging/elog-errors.hpp>
 
+#include <chrono>
+#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
+
+#ifdef ECC_PHOSPHOR_LOGGING
+#include <xyz/openbmc_project/Memory/MemoryECC/error.hpp>
+#endif
 
 using namespace phosphor::logging;
 
@@ -21,7 +27,10 @@ static constexpr const char CLOSE_EDAC_REPORT[] = "off";
 
 auto retries = 3;
 static constexpr auto delay = std::chrono::milliseconds{100};
-static constexpr auto interval = 1000000;
+static constexpr auto interval = std::chrono::seconds{1};
+#ifdef ECC_PHOSPHOR_LOGGING
+static constexpr auto ceInterval = std::chrono::hours ceInterval{1};
+#endif
 static constexpr uint16_t selBMCGenID = 0x0020;
 void ECC::init()
 {
@@ -103,7 +112,7 @@ void ECC::run()
     std::function<void()> callback(std::bind(&ECC::read, this));
     try
     {
-        _timer.restart(std::chrono::microseconds(interval));
+        _timer.restart(interval);
 
         _bus.attach_event(_event.get(), SD_EVENT_PRIORITY_IMPORTANT);
         _event.loop();
@@ -120,28 +129,43 @@ void ECC::checkEccLogFull(int64_t ceCount, int64_t ueCount)
 {
     std::string errorMsg = "ECC error(memory error logging limit reached)";
     std::vector<uint8_t> eccLogFullEventData{0x05, 0xff, 0xfe};
-    bool assert = true;
-
     auto total = ceCount + ueCount;
-    bool isReached = false;
+
     if (total == 0)
     {
-        // someone reset edac report from driver
-        // so clear all parameter
+        // someone reset edac report from driver, so clear all parameter
         EccInterface::ceCount(ceCount);
         EccInterface::ueCount(ueCount);
         previousCeCounter = 0;
         previousUeCounter = 0;
-        EccInterface::isLoggingLimitReached(isReached);
+        EccInterface::isLoggingLimitReached(false);
+#ifdef ECC_PHOSPHOR_LOGGING
+        startCeCount = 0;
+        maxCeLimitReached = false;
+#endif
+        return;
     }
-    else if (total >= maxECCLog)
+
+    if (total >= maxECCLog)
     {
+#ifdef ECC_PHOSPHOR_LOGGING
+        if (((previousCeCounter - startCeCount) >= maxECCLog) &&
+            !maxCeLimitReached)
+        {
+            using error = sdbusplus::xyz::openbmc_project::Memory::MemoryECC::
+                Error::isLoggingLimitReached;
+            report<error>();
+
+            maxCeLimitReached = true;
+            maxCeLimitReachedTime = std::chrono::system_clock::now();
+        }
+#else
         // add SEL log
-        addSELLog(errorMsg, OBJPATH, eccLogFullEventData, assert, selBMCGenID);
-        isReached = true;
-        EccInterface::isLoggingLimitReached(isReached);
-        controlEDACReport(CLOSE_EDAC_REPORT);
+        addSELLog(errorMsg, OBJPATH, eccLogFullEventData, true, selBMCGenID);
+#endif
         // set ECC state
+        EccInterface::isLoggingLimitReached(true);
+        controlEDACReport(CLOSE_EDAC_REPORT);
         EccInterface::state(MemoryECC::ECCStatus::LogFull);
     }
 }
@@ -155,15 +179,36 @@ int ECC::checkCeCount()
     fullPath.append(item);
     value = std::stoi(getValue(fullPath));
     std::vector<uint8_t> eccCeEventData{0x00, 0xff, 0xfe};
-    bool assert = true;
 
-    while (previousCeCounter < value)
+#ifdef ECC_PHOSPHOR_LOGGING
+    auto currentTime = std::chrono::system_clock::now();
+
+    // Start logging CE after user defined elaspsed time
+    if (maxCeLimitReached &&
+        (currentTime - maxCeLimitReachedTime >= ceInterval))
     {
-        previousCeCounter++;
-        // add phosphor-logging log
-        EccInterface::ceCount(previousCeCounter);
+        if (value)
+            startCeCount = previousCeCounter = value;
+        else
+            startCeCount = previousCeCounter = 0;
+        maxCeLimitReached = false;
+    }
+#endif
+    for (int64_t i = previousCeCounter + 1; i <= value; i++)
+    {
+        previousCeCounter = i;
+        EccInterface::ceCount(i);
+#ifdef ECC_PHOSPHOR_LOGGING
+        if ((i - startCeCount) < maxECCLog)
+        {
+            using warning = sdbusplus::xyz::openbmc_project::Memory::MemoryECC::
+                Error::ceCount;
+            report<warning>();
+        }
+#else
         // add SEL log
-        addSELLog(errorMsg, OBJPATH, eccCeEventData, assert, selBMCGenID);
+        addSELLog(errorMsg, OBJPATH, eccCeEventData, true, selBMCGenID);
+#endif
         // set ECC state
         EccInterface::state(MemoryECC::ECCStatus::CE);
     }
@@ -179,15 +224,23 @@ int ECC::checkUeCount()
     fullPath.append(item);
     value = std::stoi(getValue(fullPath));
     std::vector<uint8_t> eccUeEventData{0x01, 0xff, 0xfe};
-    bool assert = true;
 
     while (previousUeCounter < value)
     {
         previousUeCounter++;
         // add phosphor-logging log
         EccInterface::ueCount(previousUeCounter);
+#ifdef ECC_PHOSPHOR_LOGGING
+        if (previousUeCounter == 1)
+        {
+            using error = sdbusplus::xyz::openbmc_project::Memory::MemoryECC::
+                Error::ueCount;
+            report<error>();
+        }
+#else
         // add SEL log
-        addSELLog(errorMsg, OBJPATH, eccUeEventData, assert, selBMCGenID);
+        addSELLog(errorMsg, OBJPATH, eccUeEventData, true, selBMCGenID);
+#endif
         // set ECC state
         EccInterface::state(MemoryECC::ECCStatus::UE);
     }

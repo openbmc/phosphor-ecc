@@ -32,6 +32,7 @@ conf_data.set('OBJROOT', '"/xyz/openbmc_project/metrics/memory/"')
 conf_data.set('OBJPATH', '"/xyz/openbmc_project/metrics/memory/BmcECC"')
 conf_data.set('sysfsRootPath', '"/sys/devices/system/edac/mc/mc0/"')
 conf_data.set('sysfsEDACReportPath', '"/sys/module/edac_core/parameters/edac_report"')
+conf_data.set('ECC_PHOSPHOR_LOGGING', get_option('ecc-phosphor-logging').enabled())
 
 configure_file(output : 'config.h',
                configuration : conf_data)
