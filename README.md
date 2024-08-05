@@ -1,17 +1,17 @@
 # phosphor-ecc
 
-### Overview
+## Overview
 
 This function is to provide the BMC with the ability to record ECC error SELs.
 The EDAC driver of BMC can detects and corrects memory errors, which helps
 identify problems before they become catastrophic faulty memory module.
 
-### Requirements
+## Requirements
 
 - The EDAC driver must be supported and enabled
 - The `phosphor-sel-logger` package must be installed
 
-### Monitor Daemon
+## Monitor Daemon
 
 Run the application and look up the ECC error count every second after service
 is started. On first start, it resets all correctable ECC counts and
@@ -38,7 +38,7 @@ reached, the ECC service will stop to record the ECC log. The `maximum quantity`
 (default:100) is saved in the configuration file, and the user can modify the
 value if necessary.
 
-### Create the ECC SEL
+## Create the ECC SEL
 
 Use the `phosphor-sel-logger` package to record the following logs in BMC SEL
 format.
