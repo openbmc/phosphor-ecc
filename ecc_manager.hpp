@@ -42,7 +42,7 @@ class ECC :
             sdbusplus::xyz::openbmc_project::Memory::server::MemoryECC>(
             bus, objPath.c_str()),
         _bus(bus), _event(sdeventplus::Event::get_default()),
-        _timer(_event, std::bind(&ECC::read, this)){
+        _timer(_event, std::bind(&ECC::read, this)) {
             // Nothing to do here
         };
 
