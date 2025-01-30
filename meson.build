@@ -32,7 +32,7 @@ conf_data.set(
 )
 conf_data.set(
     'ECC_PHOSPHOR_LOGGING',
-    get_option('ecc-phosphor-logging').enabled(),
+    get_option('ecc-phosphor-logging').allowed(),
 )
 
 configure_file(output: 'config.h', configuration: conf_data)
