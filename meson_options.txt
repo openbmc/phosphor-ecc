@@ -1,2 +1,0 @@
-option('ecc-phosphor-logging', type: 'feature', value: 'disabled',
-    description: 'Create Event logs by using phosphor-logging.')
