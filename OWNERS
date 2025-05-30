@@ -33,6 +33,7 @@
 
 owners:
 - george.hung@quantatw.com
+- patrick@stwcx.xyz
 - will.liang@quantatw.com
 
 reviewers:
@@ -43,6 +44,9 @@ openbmc:
 - name: George Hung
   email: george.hung@quantatw.com
   discord: georgehung
+- name: Patrick Williams
+  email: patrick@stwcx.xyz
+  discord: stwcx
 - name: Will Liang
   email: will.liang@quantatw.com
   discord: NA
