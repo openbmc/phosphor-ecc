@@ -285,11 +285,7 @@ void ECC::addSELLog(std::string message, std::string path,
         "xyz.openbmc_project.Logging.IPMI", "IpmiSelAdd");
     selCall.append(message, path, selData, assert, genId);
 
-    auto selReply = _bus.call(selCall);
-    if (selReply.is_method_error())
-    {
-        log<level::ERR>("add SEL log error\n");
-    }
+    _bus.call(selCall);
 }
 
 } // namespace memory
