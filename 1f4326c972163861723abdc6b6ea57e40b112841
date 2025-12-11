@@ -1,0 +1,9 @@
+Code-Review+2: Patrick Williams <patrick@stwcx.xyz>
+Code-Review+1: George Hung <george.hung@quantatw.com>
+Code-Review+1: Will Liang <will.liang@quantatw.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Submitted-by: Patrick Williams <patrick@stwcx.xyz>
+Submitted-at: Thu, 11 Dec 2025 20:44:20 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/phosphor-ecc/+/84907
+Project: openbmc/phosphor-ecc
+Branch: refs/heads/master
