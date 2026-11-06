@@ -183,7 +183,7 @@ int ECC::checkCeCount()
 #ifdef ECC_PHOSPHOR_LOGGING
     auto currentTime = std::chrono::system_clock::now();
 
-    // Start logging CE after user defined elaspsed time
+    // Start logging CE after user defined elapsed time
     if (maxCeLimitReached &&
         (currentTime - maxCeLimitReachedTime >= ceInterval))
     {
